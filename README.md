@@ -1,11 +1,42 @@
-<div align="center">
+# Smart Sidebar (Chrome Extension)
 
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
+Smart Sidebar is a sleek Chrome side panel that lets you organize **unlimited shortcuts** (web apps, tools, links) without the New Tab shortcut limit.
 
-  <h1>Built with AI Studio</h2>
+![Smart Sidebar screenshot](assets/smart-sidebar.png)
 
-  <p>The fastest path from prompt to production with Gemini.</p>
+## Features
 
-  <a href="https://aistudio.google.com/apps">Start building</a>
+- **Unlimited shortcuts** in a compact grid
+- **Side panel UX** that feels native to Chrome
+- **Floating edge widget** (click to open instantly)
+- **Add / edit / delete** shortcuts with a quick context menu
+- **Click-outside close** behavior via content script
 
-</div>
+## Install (Chrome)
+
+This repo includes a small Next.js app that **packages the extension source as a zip**.
+
+1. Install dependencies:
+   - `npm install`
+2. Start the packager UI:
+   - `npm run dev`
+3. Open the app in your browser (shown in the terminal), then click:
+   - **Download Extension Source (.zip)**
+4. Unzip the downloaded file.
+5. In Chrome, open `chrome://extensions` and enable **Developer mode**.
+6. Click **Load unpacked** and select the unzipped folder.
+
+## Development
+
+- Run the packager UI: `npm run dev`
+- Production build: `npm run build` then `npm start`
+
+## Customize
+
+- Extension templates are generated from [lib/extension-files.ts](lib/extension-files.ts)
+- Icon assets live at the repo root (`icon.svg`, `icon.png`, `icon48.png`)
+
+## Notes
+
+- The side panel UI persists shortcuts using Chrome storage.
+- The floating widget is injected on all pages via a content script.

@@ -1,0 +1,24 @@
+<svg width="128" height="128" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="128" height="128" rx="28" fill="url(#bg_grad)"/>
+  <rect x="2" y="2" width="124" height="124" rx="26" stroke="rgba(255,255,255,0.15)" stroke-width="4"/>
+  <rect x="24" y="24" width="80" height="80" rx="12" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.1)" stroke-width="2"/>
+  <rect x="70" y="24" width="34" height="80" rx="8" fill="url(#sidebar_grad)" />
+  <rect x="74" y="32" width="26" height="4" rx="2" fill="white" opacity="0.8"/>
+  <rect x="74" y="44" width="10" height="10" rx="3" fill="white" opacity="0.9"/>
+  <rect x="88" y="44" width="10" height="10" rx="3" fill="white" opacity="0.9"/>
+  <rect x="74" y="58" width="10" height="10" rx="3" fill="white" opacity="0.9"/>
+  <rect x="88" y="58" width="10" height="10" rx="3" fill="white" opacity="0.9"/>
+  <path d="M42 38 L44 48 L54 50 L44 52 L42 62 L40 52 L30 50 L40 48 Z" fill="white" opacity="0.9"/>
+  <circle cx="56" cy="38" r="3" fill="white" opacity="0.6"/>
+  <circle cx="36" cy="68" r="4" fill="white" opacity="0.6"/>
+  <defs>
+    <linearGradient id="bg_grad" x1="0" y1="0" x2="128" y2="128" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#1E1B4B" />
+      <stop offset="1" stop-color="#0F0822" />
+    </linearGradient>
+    <linearGradient id="sidebar_grad" x1="70" y1="24" x2="104" y2="104" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#8B5CF6"/>
+      <stop offset="1" stop-color="#C084FC"/>
+    </linearGradient>
+  </defs>
+</svg>
