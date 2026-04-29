@@ -2,7 +2,7 @@
 
 Smart Sidebar is a sleek Chrome side panel that lets you organize **unlimited shortcuts** (web apps, tools, links) without the New Tab shortcut limit.
 
-![Smart Sidebar screenshot](assets/smart-sidebar.png)
+![Smart Sidebar screenshot](https://i.ibb.co/zh8K9P5w/Screenshot-2026-04-29-081750.png)
 
 ## Features
 
