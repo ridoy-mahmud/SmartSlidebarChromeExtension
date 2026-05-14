@@ -1,28 +1,22 @@
-import type { Metadata } from "next";
-import { Poppins } from "next/font/google";
-import "./globals.css";
+import type {Metadata} from 'next';
+import { Poppins } from 'next/font/google';
+import './globals.css';
 
 const poppins = Poppins({
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
-  variable: "--font-poppins",
+  subsets: ['latin'],
+  weight: ['300', '400', '500', '600', '700'],
+  variable: '--font-poppins',
 });
 
 export const metadata: Metadata = {
-  title: "Smart Sidebar",
-  description: "Unlimited shortcuts in a sleek Chrome side panel.",
+  title: 'My Google AI Studio App',
+  description: 'My Google AI Studio App',
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({children}: {children: React.ReactNode}) {
   return (
-    <html lang="en" className={poppins.variable}>
-      <body className="font-poppins" suppressHydrationWarning>
-        {children}
-      </body>
+    <html lang="en" className={poppins.variable} suppressHydrationWarning>
+      <body className="font-poppins" suppressHydrationWarning>{children}</body>
     </html>
   );
 }

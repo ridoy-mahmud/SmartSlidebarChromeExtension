@@ -55,9 +55,6 @@ export default function Home() {
           <div className="ml-4 flex-1 h-6 bg-slate-700/50 rounded-md max-w-sm"></div>
         </div>
         <div className="flex-1 bg-[#0f0f15] relative">
-          <div className="absolute right-0 top-1/2 -translate-y-1/2 w-[32px] h-[48px] bg-[#0d0518] border border-purple-400/40 border-r-0 rounded-l-xl shadow-[-4px_4px_16px_rgba(0,0,0,0.2)] flex items-center pl-[6px] z-50 pointer-events-auto cursor-pointer hover:w-[42px] hover:pl-[10px] hover:bg-[#1a0b2e] group transition-all duration-200">
-            <img src={`data:image/png;base64,${base64Icon48}`} alt="Sidebar Icon" className="w-5 h-5 rounded transition-transform duration-200 group-hover:scale-110" />
-          </div>
         </div>
       </div>
 
@@ -67,25 +64,26 @@ export default function Home() {
           <div className="w-10 h-10 rounded-xl flex items-center justify-center shadow-lg shadow-purple-500/20">
             <img src={`data:image/png;base64,${base64Icon48}`} alt="Logo" className="w-full h-full rounded-xl" />
           </div>
-          <h1 className="text-3xl font-bold tracking-tight text-white">Smart Sidebar Extension</h1>
+          <h1 suppressHydrationWarning className="text-3xl font-bold tracking-tight text-white">Smart Sidebar Extension</h1>
         </div>
 
-        <p className="text-lg text-slate-400 mb-8 max-w-2xl leading-relaxed">
+        <p suppressHydrationWarning className="text-lg text-slate-400 mb-8 max-w-2xl leading-relaxed">
           Your custom Chrome extension is ready! It solves the Chrome new tab shortcut limit by providing a persistent, sleek side panel to organize unlimited web apps and shortcuts.
         </p>
 
         <button 
+          suppressHydrationWarning
           onClick={downloadExtension} 
           disabled={downloading}
           className="bg-purple-600 hover:bg-purple-500 text-white font-medium py-4 px-8 rounded-xl shadow-[0_0_24px_rgba(147,51,234,0.3)] transition-all flex items-center justify-center gap-3 w-fit mb-12 hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50"
         >
           <Download size={20} />
-          {downloading ? "Packaging ZIP..." : "Download Extension Source (.zip)"}
+          <span suppressHydrationWarning>{downloading ? "Packaging ZIP..." : "Download Extension Source (.zip)"}</span>
         </button>
 
         <div className="space-y-8 max-w-2xl bg-white/5 rounded-2xl p-6 md:p-8 border border-white/10">
           <section>
-            <h2 className="text-xl font-semibold text-white mb-4 flex items-center gap-2">
+            <h2 suppressHydrationWarning className="text-xl font-semibold text-white mb-4 flex items-center gap-2">
               <CheckCircle2 size={20} className="text-emerald-400" />
               How to install in Chrome
             </h2>
@@ -102,12 +100,11 @@ export default function Home() {
           <div className="h-px w-full bg-white/10 my-4"></div>
 
           <section>
-            <h2 className="text-xl font-semibold text-white mb-4 flex items-center gap-2">
+            <h2 suppressHydrationWarning className="text-xl font-semibold text-white mb-4 flex items-center gap-2">
               <Info size={20} className="text-blue-400" />
               How to use
             </h2>
             <ul className="list-disc list-outside ml-6 space-y-4 text-slate-400">
-              <li><strong>Floating Widget:</strong> A beautiful mini-widget automatically lives on the right edge of any webpage! Just click it to instantly pop out your sidebar.</li>
               <li>Click the extension icon in your Chrome toolbar to instantly open the Sidebar. It feels native!</li>
               <li>Add any website by clicking the floating Action button (+).</li>
               <li>Right-click any shortcut to <strong>Edit</strong> or <strong>Delete</strong> it.</li>
@@ -141,12 +138,19 @@ function SidepanelPreview() {
   const [timeStr, setTimeStr] = useState("00:00");
   const [dateStr, setDateStr] = useState("Monday, 1");
   const [shortcuts, setShortcuts] = useState([
-    { id: '1', name: 'Google', url: 'https://google.com' },
-    { id: '2', name: 'YouTube', url: 'https://youtube.com' },
-    { id: '3', name: 'GitHub', url: 'https://github.com' },
-    { id: '4', name: 'Notion', url: 'https://notion.so' },
-    { id: '5', name: 'Dribbble', url: 'https://dribbble.com' },
-    { id: '6', name: 'Linear', url: 'https://linear.app' }
+    { id: '1', name: 'AI Studio', url: 'https://aistudio.google.com/' },
+    { id: '2', name: 'Claude', url: 'https://claude.ai/' },
+    { id: '3', name: 'Gemini', url: 'https://gemini.google.com/' },
+    { id: '4', name: 'ChatGPT', url: 'https://chat.openai.com/' },
+    { id: '5', name: 'Qwen', url: 'https://chat.qwenlm.ai/' },
+    { id: '6', name: 'DeepSeek', url: 'https://chat.deepseek.com/' },
+    { id: '7', name: 'Grok', url: 'https://grok.com/' },
+    { id: '8', name: 'OpenCode', url: 'https://opencode.ai/' },
+    { id: '9', name: 'NotebookLM', url: 'https://notebooklm.google.com/' },
+    { id: '10', name: 'Perplexity', url: 'https://www.perplexity.ai/' },
+    { id: '11', name: 'Lovable', url: 'https://lovable.dev/' },
+    { id: '12', name: 'HuggingFace', url: 'https://huggingface.co/' },
+    { id: '13', name: 'v0', url: 'https://v0.dev/' }
   ]);
   
   const [showModal, setShowModal] = useState(false);
@@ -201,14 +205,15 @@ function SidepanelPreview() {
       </div>
 
       <div className="flex-1 overflow-y-auto px-[14px] pt-[12px] grid grid-cols-4 gap-[8px] content-start pb-[80px]">
-        {shortcuts.map((sc) => {
+        {shortcuts.map((sc, index) => {
           let domain = 'example.com';
           try { domain = new URL(sc.url).hostname; } catch (e) {}
           
           return (
             <div 
               key={sc.id}
-              className="group relative aspect-square bg-white/5 bg-gradient-to-br from-white/5 to-white/1 flex flex-col items-center justify-center gap-[6px] cursor-pointer backdrop-blur-md border border-white/10 hover:border-purple-400/30 shadow-[0_4px_16px_rgba(0,0,0,0.2)] hover:shadow-[0_8px_24px_rgba(167,139,250,0.2)] hover:bg-purple-400/10 rounded-[4px] p-[6px] transition-all duration-300 hover:-translate-y-[2px] hover:scale-[1.02] active:scale-[0.96]"
+              style={{ animationDelay: `${index * 0.05}s` }}
+              className="group relative aspect-square bg-white/5 bg-gradient-to-br from-white/5 to-white/1 flex flex-col items-center justify-center gap-[6px] cursor-pointer backdrop-blur-md border border-white/10 hover:border-purple-400/30 shadow-[0_4px_16px_rgba(0,0,0,0.2)] hover:shadow-[0_8px_24px_rgba(167,139,250,0.2)] hover:bg-purple-400/10 rounded-[4px] p-[6px] transition-all duration-300 hover:-translate-y-[2px] hover:scale-[1.02] active:scale-[0.96] animate-[fadeInScale_0.4s_cubic-bezier(0.16,1,0.3,1)_backwards]"
               onContextMenu={(e) => {
                 e.preventDefault();
                 e.stopPropagation();

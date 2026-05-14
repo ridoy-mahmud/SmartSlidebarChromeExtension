@@ -1,8 +1,7 @@
 {
-  "name": "smart-sidebar",
+  "name": "ai-studio-applet",
   "version": "0.1.0",
   "private": true,
-  "description": "A Chrome side panel extension for unlimited shortcuts (with a Next.js-based zip packager).",
   "scripts": {
     "dev": "next dev",
     "build": "next build",

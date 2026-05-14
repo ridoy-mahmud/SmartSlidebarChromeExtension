@@ -11,18 +11,6 @@ export const manifestJson = `{
   "side_panel": {
     "default_path": "sidepanel.html"
   },
-  "content_scripts": [
-    {
-      "matches": ["<all_urls>"],
-      "js": ["content.js"]
-    }
-  ],
-  "web_accessible_resources": [
-    {
-      "resources": ["icon48.png"],
-      "matches": ["<all_urls>"]
-    }
-  ],
   "action": {
     "default_title": "Open Smart Sidebar"
   },
@@ -35,103 +23,9 @@ export const backgroundJs = `chrome.runtime.onInstalled.addListener(() => {
   chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: true })
     .catch((error) => console.error(error));
 });
-
-chrome.runtime.onMessage.addListener((message, sender) => {
-  if (message.action === 'open_side_panel' && sender.tab) {
-    chrome.sidePanel.open({ windowId: sender.tab.windowId });
-  }
-});
 `;
 
-export const contentJs = `// Injected floating button
-const injectFloatingButton = () => {
-  if (document.getElementById('smart-sidebar-floating-btn')) return;
-
-  const btn = document.createElement('div');
-  btn.id = 'smart-sidebar-floating-btn';
-  
-  // Create shadow root for isolation
-  const shadow = btn.attachShadow({ mode: 'closed' });
-  
-  const wrapper = document.createElement('div');
-  Object.assign(wrapper.style, {
-    position: 'fixed',
-    right: '0',
-    top: '50%',
-    transform: 'translateY(-50%)',
-    width: '32px',
-    height: '48px',
-    backgroundColor: '#0d0518',
-    border: '1px solid rgba(167, 139, 250, 0.4)',
-    borderRight: 'none',
-    borderRadius: '12px 0 0 12px',
-    boxShadow: '-4px 4px 16px rgba(0,0,0,0.2)',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-    paddingLeft: '6px',
-    cursor: 'pointer',
-    zIndex: '2147483647',
-    transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
-    overflow: 'hidden'
-  });
-
-  const img = document.createElement('img');
-  img.src = chrome.runtime.getURL('icon48.png');
-  Object.assign(img.style, {
-    width: '20px',
-    height: '20px',
-    borderRadius: '4px',
-    transition: 'transform 0.2s'
-  });
-
-  wrapper.appendChild(img);
-  shadow.appendChild(wrapper);
-
-  // Hover effects
-  wrapper.addEventListener('mouseenter', () => {
-    wrapper.style.width = '42px';
-    wrapper.style.backgroundColor = '#1a0b2e';
-    wrapper.style.paddingLeft = '10px';
-    img.style.transform = 'scale(1.1)';
-  });
-  
-  wrapper.addEventListener('mouseleave', () => {
-    wrapper.style.width = '32px';
-    wrapper.style.backgroundColor = '#0d0518';
-    wrapper.style.paddingLeft = '6px';
-    img.style.transform = 'scale(1)';
-  });
-
-  // Click to open
-  wrapper.addEventListener('click', (e) => {
-    e.stopPropagation();
-    try {
-      chrome.runtime.sendMessage({ action: 'open_side_panel' });
-    } catch(err) {
-      console.log('Error opening side panel:', err);
-    }
-  });
-
-  document.body.appendChild(btn);
-  return wrapper;
-};
-
-injectFloatingButton();
-
-document.addEventListener('mousedown', (e) => {
-  // Only send if it's a left click
-  if (e.button === 0) {
-    const isFloatingBtn = e.target.id === 'smart-sidebar-floating-btn';
-    if (!isFloatingBtn) {
-      try {
-        chrome.runtime.sendMessage({ action: 'close_sidepanel' });
-      } catch(err) {
-        // Ignored: extension context invalidated or panel closed
-      }
-    }
-  }
-});
+export const contentJs = `// Content script is empty because floating widget was removed
 `;
 
 
@@ -274,12 +168,13 @@ body {
   justify-content: center;
   gap: 6px;
   cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   position: relative;
   text-decoration: none;
   color: var(--text-sub);
   user-select: none;
   aspect-ratio: 1 / 1;
+  animation: fadeInScale 0.4s cubic-bezier(0.16, 1, 0.3, 1) backwards;
 }
 
 .shortcut-card:hover {
@@ -291,6 +186,7 @@ body {
 
 .shortcut-card:active {
   transform: scale(0.96);
+  transition: all 0.1s ease;
 }
 
 .icon-wrapper {
@@ -305,7 +201,7 @@ body {
   padding: 4px;
   box-sizing: border-box;
   overflow: hidden;
-  transition: transform 0.3s;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .shortcut-card:hover .icon-wrapper {
@@ -497,6 +393,7 @@ body {
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 @keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes popIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+@keyframes fadeInScale { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
 `;
 
 export const sidepanelJs = `document.addEventListener('DOMContentLoaded', () => {
@@ -534,12 +431,19 @@ export const sidepanelJs = `document.addEventListener('DOMContentLoaded', () => 
   });
 
   const defaultShortcuts = [
-    { id: '1', name: 'Google', url: 'https://google.com' },
-    { id: '2', name: 'YouTube', url: 'https://youtube.com' },
-    { id: '3', name: 'GitHub', url: 'https://github.com' },
-    { id: '4', name: 'Notion', url: 'https://notion.so' },
-    { id: '5', name: 'Dribbble', url: 'https://dribbble.com' },
-    { id: '6', name: 'Linear', url: 'https://linear.app' }
+    { id: '1', name: 'AI Studio', url: 'https://aistudio.google.com/' },
+    { id: '2', name: 'Claude', url: 'https://claude.ai/' },
+    { id: '3', name: 'Gemini', url: 'https://gemini.google.com/' },
+    { id: '4', name: 'ChatGPT', url: 'https://chat.openai.com/' },
+    { id: '5', name: 'Qwen', url: 'https://chat.qwenlm.ai/' },
+    { id: '6', name: 'DeepSeek', url: 'https://chat.deepseek.com/' },
+    { id: '7', name: 'Grok', url: 'https://grok.com/' },
+    { id: '8', name: 'OpenCode', url: 'https://opencode.ai/' },
+    { id: '9', name: 'NotebookLM', url: 'https://notebooklm.google.com/' },
+    { id: '10', name: 'Perplexity', url: 'https://www.perplexity.ai/' },
+    { id: '11', name: 'Lovable', url: 'https://lovable.dev/' },
+    { id: '12', name: 'HuggingFace', url: 'https://huggingface.co/' },
+    { id: '13', name: 'v0', url: 'https://v0.dev/' }
   ];
 
   chrome.storage.local.get(['shortcuts'], (result) => {
@@ -572,11 +476,12 @@ export const sidepanelJs = `document.addEventListener('DOMContentLoaded', () => 
 
   function renderGrid() {
     grid.innerHTML = '';
-    shortcuts.forEach((sc) => {
+    shortcuts.forEach((sc, index) => {
       const a = document.createElement('a');
       a.className = 'shortcut-card';
       a.href = sc.url;
       a.dataset.id = sc.id;
+      a.style.animationDelay = \`\${index * 0.05}s\`;
       
       let domain = 'example.com';
       try { domain = new URL(sc.url).hostname; } catch (e) {}
